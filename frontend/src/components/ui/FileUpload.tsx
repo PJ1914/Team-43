@@ -72,7 +72,9 @@ const FileUpload = ({ documents, onDocumentsChange, disabled }: FileUploadProps)
               className="flex items-center justify-between rounded-lg border border-slate-200 bg-white p-2"
             >
               <div className="flex items-center gap-2">
-                <span className="text-lg">📄</span>
+                <svg className="w-5 h-5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                </svg>
                 <div>
                   <p className="text-sm font-medium text-slate-700">{doc.fileName}</p>
                   <p className="text-xs text-slate-500">{formatFileSize(doc.fileSize)}</p>
@@ -85,7 +87,9 @@ const FileUpload = ({ documents, onDocumentsChange, disabled }: FileUploadProps)
                 className="rounded p-1 text-slate-400 hover:bg-rose-50 hover:text-rose-600 disabled:opacity-50"
                 title="Remove document"
               >
-                ✕
+                <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
               </button>
             </div>
           ))}

@@ -67,7 +67,10 @@ const EntryList = ({ entries, onEdit, onDelete, onVerify }: EntryListProps) => {
                       rel="noopener noreferrer"
                       className="flex items-center gap-1.5 text-xs text-brand-600 hover:text-brand-700 hover:underline"
                     >
-                      📄 {doc.fileName}
+                      <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                      </svg>
+                      {doc.fileName}
                     </a>
                   ))}
                 </div>
@@ -101,16 +104,22 @@ const EntryList = ({ entries, onEdit, onDelete, onVerify }: EntryListProps) => {
               {canVerify && entry.verificationStatus === "pending" && (
                 <>
                   <button 
-                    className="flex-1 rounded-lg bg-green-100 px-3 py-2 text-xs font-semibold text-green-700 hover:bg-green-200 transition"
+                    className="flex-1 rounded-lg bg-green-100 px-3 py-2 text-xs font-semibold text-green-700 hover:bg-green-200 transition flex items-center justify-center gap-1.5"
                     onClick={() => void handleVerify(entry.entryId, "approve")}
                   >
-                    ✓ Approve
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                    Approve
                   </button>
                   <button 
-                    className="flex-1 rounded-lg bg-rose-100 px-3 py-2 text-xs font-semibold text-rose-700 hover:bg-rose-200 transition"
+                    className="flex-1 rounded-lg bg-rose-100 px-3 py-2 text-xs font-semibold text-rose-700 hover:bg-rose-200 transition flex items-center justify-center gap-1.5"
                     onClick={() => void handleVerify(entry.entryId, "reject")}
                   >
-                    ✕ Reject
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                    Reject
                   </button>
                 </>
               )}
@@ -155,7 +164,10 @@ const EntryList = ({ entries, onEdit, onDelete, onVerify }: EntryListProps) => {
                             rel="noopener noreferrer"
                             className="flex items-center gap-1 text-xs text-brand-600 hover:text-brand-700 hover:underline"
                           >
-                            📄 {doc.fileName}
+                            <svg className="w-4 h-4 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
+                        </svg>
+                        {doc.fileName}
                           </a>
                         ))}
                       </div>
@@ -187,13 +199,19 @@ const EntryList = ({ entries, onEdit, onDelete, onVerify }: EntryListProps) => {
                             className="rounded-lg bg-green-100 px-3 py-1.5 text-xs font-semibold text-green-700 hover:bg-green-200"
                             onClick={() => void handleVerify(entry.entryId, "approve")}
                           >
-                            ✓ Approve
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                            </svg>
+                            Approve
                           </button>
                           <button 
                             className="rounded-lg bg-rose-100 px-3 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-200"
                             onClick={() => void handleVerify(entry.entryId, "reject")}
                           >
-                            ✕ Reject
+                            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                            Reject
                           </button>
                         </div>
                       )}

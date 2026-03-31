@@ -33,7 +33,7 @@ const Topbar = ({ onMenuClick }: TopbarProps) => {
         onClick={() => signOut(auth)}
       >
         <span className="hidden sm:inline">Sign Out</span>
-        <span className="sm:hidden">Exit</span>
+        <span className="sm:hidden">Sign Out</span>
       </button>
     </header>
   );
