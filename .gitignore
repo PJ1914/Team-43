@@ -1,14 +1,36 @@
+# Dependencies
 node_modules
+*/node_modules
+
+# Build outputs
 dist
 build
-.env
-.env.*
-!.env.example
-coverage
-.vscode
-*.log
-frontend/.vercel
-backend/.cache
 *.tsbuildinfo
 frontend/vite.config.js
 frontend/vite.config.d.ts
+
+# Environment variables (NEVER COMMIT THESE!)
+.env
+.env.*
+!.env.example
+backend/.env
+backend/.env.*
+frontend/.env
+frontend/.env.*
+
+# Testing & Coverage
+coverage
+jest.config.local.ts
+
+# Editor
+.vscode
+*.log
+
+# Cache & Temporary
+frontend/.vercel
+backend/.cache
+
+# Security - Firebase credentials
+**/serviceAccountKey.json
+**/*-firebase-adminsdk-*.json
+firebase-debug.log
