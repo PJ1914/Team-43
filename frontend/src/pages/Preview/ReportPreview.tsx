@@ -106,9 +106,6 @@ const ReportPreview = () => {
                   onClick={() => void handleExport(option)}
                   className="w-full px-4 py-3 text-left text-sm text-slate-700 hover:bg-slate-50 first:rounded-t-xl last:rounded-b-xl"
                 >
-                  {option === "all" && <span className="mr-2">📄</span>}
-                  {option === "with-data" && <span className="mr-2">✅</span>}
-                  {option === "without-data" && <span className="mr-2">⬜</span>}
                   {FILTER_LABELS[option]}
                 </button>
               ))}
