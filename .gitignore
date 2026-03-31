@@ -1,0 +1,14 @@
+node_modules
+dist
+build
+.env
+.env.*
+!.env.example
+coverage
+.vscode
+*.log
+frontend/.vercel
+backend/.cache
+*.tsbuildinfo
+frontend/vite.config.js
+frontend/vite.config.d.ts

@@ -1,0 +1,133 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Helper function to check if user is authenticated
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    // Helper function to get user role
+    function getUserRole() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role;
+    }
+    
+    // Helper function to get user department
+    function getUserDepartment() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data.department;
+    }
+    
+    // Role check functions
+    function isAdmin() {
+      return isSignedIn() && getUserRole() == 'admin';
+    }
+    
+    function isCoordinator() {
+      return isSignedIn() && getUserRole() == 'coordinator';
+    }
+    
+    function isFaculty() {
+      return isSignedIn() && getUserRole() == 'faculty';
+    }
+    
+    function isAdminOrCoordinator() {
+      return isAdmin() || isCoordinator();
+    }
+    
+    // Check if user can access department data
+    function canAccessDepartment(department) {
+      return isAdmin() || getUserDepartment() == department;
+    }
+    
+    // Users collection
+    match /users/{userId} {
+      // Faculty: Read own profile only
+      // Coordinator: Read all users in same department
+      // Admin: Read all users
+      allow read: if isSignedIn() && (
+        request.auth.uid == userId || 
+        isAdminOrCoordinator()
+      );
+      
+      // Only user themselves can update their own profile (except role)
+      allow update: if isSignedIn() && request.auth.uid == userId && 
+        request.resource.data.role == resource.data.role; // Cannot change own role
+      
+      // Only admin can create users or change roles
+      allow create, delete: if isAdmin();
+      
+      // Admin can update any user including role changes
+      allow update: if isAdmin();
+    }
+    
+    // Reports collection
+    match /reports/{reportId} {
+      // Faculty: Read reports from own department only
+      // Coordinator: Read all reports from own department
+      // Admin: Read all reports
+      allow read: if isSignedIn() && (
+        isAdmin() || 
+        canAccessDepartment(resource.data.department)
+      );
+      
+      // Faculty: Can create reports for own department
+      // Coordinator: Can create reports for own department
+      // Admin: Can create reports for any department
+      allow create: if isSignedIn() && (
+        isAdmin() || 
+        canAccessDepartment(request.resource.data.department)
+      );
+      
+      // Faculty: Cannot update/delete reports
+      // Coordinator: Can update/delete reports in own department
+      // Admin: Can update/delete any report
+      allow update, delete: if isSignedIn() && (
+        isAdmin() || 
+        (isCoordinator() && canAccessDepartment(resource.data.department))
+      );
+    }
+    
+    // Sections collection
+    match /sections/{sectionId} {
+      // Faculty: Read sections for reports they can access
+      // Coordinator: Read sections for own department reports
+      // Admin: Read all sections
+      allow read: if isSignedIn();
+      
+      // Faculty: Can mark sections as completed for own department
+      // Coordinator: Can manage sections in own department
+      // Admin: Can manage all sections
+      allow write: if isSignedIn();
+    }
+    
+    // Entries collection
+    match /entries/{entryId} {
+      // All authenticated users can read entries
+      allow read: if isSignedIn();
+      
+      // Faculty: Can create entries
+      // Coordinator: Can create entries
+      // Admin: Can create entries
+      allow create: if isSignedIn() && 
+        request.resource.data.createdBy == request.auth.uid;
+      
+      // Faculty: Can only edit/delete own entries
+      // Coordinator: Can edit/delete own entries + entries in own department
+      // Admin: Can edit/delete any entry
+      allow update, delete: if isSignedIn() && (
+        resource.data.createdBy == request.auth.uid ||
+        isAdminOrCoordinator()
+      );
+    }
+    
+    // Config collection - system configuration
+    match /config/{configId} {
+      // All authenticated users can read configuration
+      allow read: if isSignedIn();
+      
+      // Only admin can modify system configuration
+      allow write: if isAdmin();
+    }
+  }
+}

@@ -1,0 +1,21 @@
+services:
+  - type: web
+    name: teamx-college-backend
+    env: node
+    buildCommand: npm install && npm run build
+    startCommand: npm run start
+    rootDir: backend
+    autoDeploy: true
+    envVars:
+      - key: PORT
+        value: 5000
+      - key: NODE_ENV
+        value: production
+      - key: FRONTEND_URL
+        sync: false
+      - key: FIREBASE_PROJECT_ID
+        sync: false
+      - key: FIREBASE_CLIENT_EMAIL
+        sync: false
+      - key: FIREBASE_PRIVATE_KEY
+        sync: false

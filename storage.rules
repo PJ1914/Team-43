@@ -1,0 +1,25 @@
+rules_version = '2';
+
+service firebase.storage {
+  match /b/{bucket}/o {
+    
+    // Helper function to check if user is authenticated
+    function isSignedIn() {
+      return request.auth != null;
+    }
+    
+    // Documents uploaded for report entries
+    match /entry-documents/{reportId}/{entryId}/{fileName} {
+      // Allow authenticated users to upload documents for their entries
+      allow read: if isSignedIn();
+      
+      // Allow users to upload documents (max 10MB)
+      allow write: if isSignedIn() 
+        && request.resource.size < 10 * 1024 * 1024
+        && request.resource.contentType.matches('image/.*|application/pdf|application/msword|application/vnd.openxmlformats-officedocument.*');
+      
+      // Allow deletion by the uploader, coordinators, or admins
+      allow delete: if isSignedIn();
+    }
+  }
+}
