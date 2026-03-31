@@ -402,7 +402,7 @@ export const exportReport = async (req: AuthenticatedRequest, res: Response) => 
 
     // Section title
     doc.fontSize(11).font("Helvetica-Bold").fillColor("#000000");
-    doc.text(`${sectionNumber}.  ${schema?.name ?? section.name}`);
+    doc.text(`${sectionNumber}.  ${schema?.name ?? section.name}`, PAGE_LEFT, doc.y, { align: "left" });
     doc.moveDown(0.25);
 
     const rawEntries = entriesBySectionId[section.id] ?? [];
@@ -416,7 +416,7 @@ export const exportReport = async (req: AuthenticatedRequest, res: Response) => 
         (e) => String(e["participantType"] ?? "") === "Faculty Members",
       );
 
-      doc.fontSize(10).font("Helvetica-Bold").fillColor("#000000").text("Students");
+      doc.fontSize(10).font("Helvetica-Bold").fillColor("#000000").text("Students", PAGE_LEFT, doc.y, { align: "left" });
       doc.moveDown(0.2);
       const studentRows = studentEntries.map((e, i) =>
         Object.fromEntries(
@@ -429,7 +429,7 @@ export const exportReport = async (req: AuthenticatedRequest, res: Response) => 
       doc.y = drawFullTable(doc, VEDIC_STUDENTS_COLS, studentRows, doc.y);
       doc.moveDown(0.5);
 
-      doc.fontSize(10).font("Helvetica-Bold").fillColor("#000000").text("Faculty Members");
+      doc.fontSize(10).font("Helvetica-Bold").fillColor("#000000").text("Faculty Members", PAGE_LEFT, doc.y, { align: "left" });
       doc.moveDown(0.2);
       const facultyRows = facultyEntries.map((e, i) =>
         Object.fromEntries(
