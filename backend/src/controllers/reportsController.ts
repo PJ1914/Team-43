@@ -71,12 +71,14 @@ export const getReportById = async (req: AuthenticatedRequest, res: Response) =>
 
 export const getReports = async (req: AuthenticatedRequest, res: Response) => {
   // Faculty can only see reports from their own department
-  let reportsQuery = reportsCollection.orderBy("createdAt", "desc");
+  let reportsQuery;
   
   if (req.user?.role === "faculty") {
-    reportsQuery = reportsCollection
-      .where("department", "==", req.user.department)
-      .orderBy("createdAt", "desc");
+    // For faculty, filter by department (no orderBy to avoid composite index requirement)
+    reportsQuery = reportsCollection.where("department", "==", req.user.department);
+  } else {
+    // For admin/coordinator, get all reports
+    reportsQuery = reportsCollection;
   }
   
   const reportsSnapshot = await reportsQuery.get();
@@ -95,6 +97,10 @@ export const getReports = async (req: AuthenticatedRequest, res: Response) => {
       };
     }),
   );
+
+  // Sort by createdAt in memory (descending)
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  (reports as any[]).sort((a, b) => new Date(String(b.createdAt ?? "")).getTime() - new Date(String(a.createdAt ?? "")).getTime());
 
   return res.status(200).json({ reports });
 };

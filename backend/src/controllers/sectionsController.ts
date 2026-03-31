@@ -135,7 +135,6 @@ export const getSectionEntries = async (req: AuthenticatedRequest, res: Response
   const snapshot = await entriesCollection
     .where("sectionId", "==", sectionId)
     .where("reportId", "==", weekId)
-    .orderBy("createdAt", "desc")
     .get();
 
   const entries = await Promise.all(
