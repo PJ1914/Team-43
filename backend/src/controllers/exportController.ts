@@ -317,14 +317,25 @@ export const exportReport = async (req: AuthenticatedRequest, res: Response) => 
     ),
   );
 
-  const sections = await getSectionsConfig();
+  // filter = "all" | "with-data" | "without-data"
+  const filter = String(req.query.filter ?? "all");
+
+  const allSections = await getSectionsConfig();
+  const sections = allSections.filter((s) => {
+    const hasData = (entriesBySectionId[s.id] ?? []).length > 0;
+    if (filter === "with-data") return hasData;
+    if (filter === "without-data") return !hasData;
+    return true; // "all"
+  });
+
   const schemasObj = await getSchemasConfig();
 
+  const filterLabel = filter === "with-data" ? "-WithData" : filter === "without-data" ? "-Empty" : "";
   const doc = new PDFDocument({ margin: 40, size: "A4" });
   res.setHeader("Content-Type", "application/pdf");
   res.setHeader(
     "Content-Disposition",
-    `attachment; filename="Weekly-Report-${report.department}-${report.startDate}.pdf"`,
+    `attachment; filename="Weekly-Report-${report.department}-${report.startDate}${filterLabel}.pdf"`,
   );
   doc.pipe(res);
 
