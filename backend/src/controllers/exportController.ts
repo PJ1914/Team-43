@@ -395,7 +395,7 @@ export const exportReport = async (req: AuthenticatedRequest, res: Response) => 
         .fontSize(12)
         .font("Helvetica-Bold")
         .fillColor("#cc0000")
-        .text(CATEGORY_HEADERS[section.id], { align: "center" });
+        .text(CATEGORY_HEADERS[section.id], PAGE_LEFT, doc.y, { width: PAGE_WIDTH, align: "center" });
       doc.fillColor("#000000");
       doc.moveDown(0.3);
     }
